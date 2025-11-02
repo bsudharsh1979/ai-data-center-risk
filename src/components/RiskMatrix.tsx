@@ -60,8 +60,13 @@ export function RiskMatrix({ risks, onRiskClick }: RiskMatrixProps) {
                       <Badge className={cn('text-xs flex-shrink-0', getSeverityColor(risk.severity))}>
                         {risk.severity.slice(0, 1).toUpperCase()}
                       </Badge>
-                      <span className="text-sm truncate">{risk.name}</span>
-                      <span className="text-xs text-muted-foreground ml-auto flex-shrink-0">
+                      <div className="flex-1 min-w-0">
+                        <span className="text-sm truncate block">{risk.name}</span>
+                        <Badge variant="outline" className="text-xs capitalize mt-1">
+                          {risk.type}
+                        </Badge>
+                      </div>
+                      <span className="text-xs text-muted-foreground flex-shrink-0">
                         {risk.likelihood}×{risk.impactScore}
                       </span>
                     </div>

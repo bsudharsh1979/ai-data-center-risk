@@ -64,7 +64,11 @@ export function RiskCard({ risk, onClick }: RiskCardProps) {
           </div>
           <div>
             <h3 className="font-semibold text-sm mb-1">{risk.name}</h3>
-            <p className="text-xs text-muted-foreground">{categoryInfo.label}</p>
+            <div className="flex items-center gap-2">
+              <p className="text-xs text-muted-foreground">{categoryInfo.label}</p>
+              <span className="text-xs text-muted-foreground">•</span>
+              <Badge variant="outline" className="text-xs capitalize">{risk.type}</Badge>
+            </div>
           </div>
         </div>
         <Badge className={cn('text-xs font-medium', getSeverityColor(risk.severity))}>
@@ -118,10 +122,10 @@ export function RiskCard({ risk, onClick }: RiskCardProps) {
         </div>
       </div>
 
-      {risk.dependencies.length > 0 && (
+      {risk.interconnections.length > 0 && (
         <div className="mt-3 pt-3 border-t border-border/50">
           <p className="text-xs text-muted-foreground">
-            Affects {risk.dependencies.length} other risk{risk.dependencies.length !== 1 && 's'}
+            Connected to {risk.interconnections.length} other risk{risk.interconnections.length !== 1 && 's'}
           </p>
         </div>
       )}

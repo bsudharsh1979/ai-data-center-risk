@@ -25,6 +25,7 @@ export function RiskDetailDialog({ risk, open, onOpenChange }: RiskDetailDialogP
 
   const categoryInfo = getCategoryInfo(risk.category)
   const dependentRisks = risks.filter((r) => risk.dependencies.includes(r.id))
+  const interconnectedRisks = risks.filter((r) => risk.interconnections.includes(r.id))
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -35,6 +36,9 @@ export function RiskDetailDialog({ risk, open, onOpenChange }: RiskDetailDialogP
               {risk.name}
               <Badge className={cn('text-xs', getSeverityColor(risk.severity))}>
                 {risk.severity.toUpperCase()}
+              </Badge>
+              <Badge variant="outline" className="text-xs capitalize">
+                {risk.type}
               </Badge>
             </DialogTitle>
           </div>
@@ -110,9 +114,9 @@ export function RiskDetailDialog({ risk, open, onOpenChange }: RiskDetailDialogP
                     </Badge>
                   </div>
                   <div className="flex items-center justify-between">
-                    <span className="text-xs text-muted-foreground">Dependencies</span>
+                    <span className="text-xs text-muted-foreground">Interconnections</span>
                     <Badge variant="outline" className="text-xs">
-                      {risk.dependencies.length}
+                      {risk.interconnections.length}
                     </Badge>
                   </div>
                 </div>
@@ -177,33 +181,36 @@ export function RiskDetailDialog({ risk, open, onOpenChange }: RiskDetailDialogP
             <Card className="p-4">
               <h3 className="font-semibold mb-3 flex items-center gap-2">
                 <GitFork size={18} />
-                Interdependent Risks
+                Risk Interconnections
               </h3>
-              {dependentRisks.length > 0 ? (
+              {interconnectedRisks.length > 0 ? (
                 <div className="space-y-2">
-                  {dependentRisks.map((depRisk) => (
+                  {interconnectedRisks.map((depRisk) => (
                     <div key={depRisk.id} className="flex items-center gap-3 p-3 rounded-lg bg-secondary/30 hover:bg-secondary/50 transition-colors">
                       <Badge className={cn('text-xs', getSeverityColor(depRisk.severity))}>
                         {depRisk.severity.toUpperCase()}
                       </Badge>
                       <div className="flex-1">
-                        <p className="font-semibold text-sm">{depRisk.name}</p>
+                        <div className="flex items-center gap-2">
+                          <p className="font-semibold text-sm">{depRisk.name}</p>
+                          <Badge variant="outline" className="text-xs capitalize">{depRisk.type}</Badge>
+                        </div>
                         <p className="text-xs text-muted-foreground">{getCategoryInfo(depRisk.category).label}</p>
                       </div>
                     </div>
                   ))}
                 </div>
               ) : (
-                <p className="text-sm text-muted-foreground">No interdependent risks identified.</p>
+                <p className="text-sm text-muted-foreground">No risk interconnections identified.</p>
               )}
             </Card>
 
-            {dependentRisks.length > 0 && (
+            {interconnectedRisks.length > 0 && (
               <Card className="p-4 bg-accent/5 border-accent/20">
                 <h3 className="font-semibold mb-2 text-sm">Cascading Impact</h3>
                 <p className="text-sm text-muted-foreground">
-                  This risk can trigger or amplify {dependentRisks.length} other risk{dependentRisks.length !== 1 && 's'} in your infrastructure.
-                  Addressing this risk will help mitigate multiple failure scenarios.
+                  This risk is interconnected with {interconnectedRisks.length} other risk{interconnectedRisks.length !== 1 && 's'} in your infrastructure.
+                  Addressing this risk will help mitigate multiple failure scenarios across technical and business domains.
                 </p>
               </Card>
             )}

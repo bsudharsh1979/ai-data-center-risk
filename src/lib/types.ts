@@ -1,10 +1,12 @@
 export type RiskSeverity = 'critical' | 'high' | 'medium' | 'low'
 export type RiskCategory = 'gpu-hardware' | 'network-dpu' | 'nvlink' | 'software' | 'power-cooling' | 'storage-io' | 'security' | 'compliance'
+export type RiskType = 'technical' | 'business' | 'operational'
 
 export interface Risk {
   id: string
   name: string
   category: RiskCategory
+  type: RiskType
   severity: RiskSeverity
   description: string
   impact: string
@@ -12,6 +14,7 @@ export interface Risk {
   impactScore: number
   affectedSystems: string[]
   dependencies: string[]
+  interconnections: string[]
   mitigation: string[]
   monitoringTools: string[]
   recentIncidents: number

@@ -2,26 +2,32 @@ import { useState } from 'react'
 import { Toaster } from '@/components/ui/sonner'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Alert, AlertDescription } from '@/components/ui/alert'
+import { Badge } from '@/components/ui/badge'
 import { RiskCard } from '@/components/RiskCard'
 import { MonitoringToolCard } from '@/components/MonitoringToolCard'
 import { RiskDetailDialog } from '@/components/RiskDetailDialog'
 import { RiskMatrix } from '@/components/RiskMatrix'
 import { BestPracticesPanel } from '@/components/BestPracticesPanel'
+import { RiskInterconnections } from '@/components/RiskInterconnections'
 import { risks, monitoringTools } from '@/lib/data'
 import { Risk } from '@/lib/types'
-import { Activity, ChartBar, BookOpen, ShieldCheck, CheckCircle } from '@phosphor-icons/react'
+import { Activity, ChartBar, BookOpen, ShieldCheck, CheckCircle, GitBranch, Cpu, BriefcaseMetal } from '@phosphor-icons/react'
 
 function App() {
   const [selectedRisk, setSelectedRisk] = useState<Risk | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [riskFilter, setRiskFilter] = useState<'all' | 'technical' | 'business'>('all')
 
   const handleRiskClick = (risk: Risk) => {
     setSelectedRisk(risk)
     setDialogOpen(true)
   }
 
+  const filteredRisks = risks.filter(r => riskFilter === 'all' || r.type === riskFilter)
   const criticalRisks = risks.filter((r) => r.severity === 'critical')
   const highRisks = risks.filter((r) => r.severity === 'high')
+  const technicalRisks = risks.filter((r) => r.type === 'technical')
+  const businessRisks = risks.filter((r) => r.type === 'business')
   const totalAlerts = monitoringTools.reduce((sum, tool) => sum + tool.alertCount, 0)
 
   return (
@@ -78,10 +84,14 @@ function App() {
         </div>
 
         <Tabs defaultValue="dashboard" className="space-y-6">
-          <TabsList className="grid w-full grid-cols-4 lg:w-auto lg:inline-grid">
+          <TabsList className="grid w-full grid-cols-5 lg:w-auto lg:inline-grid">
             <TabsTrigger value="dashboard" className="gap-2">
               <Activity size={16} />
               Dashboard
+            </TabsTrigger>
+            <TabsTrigger value="interconnections" className="gap-2">
+              <GitBranch size={16} />
+              Interconnections
             </TabsTrigger>
             <TabsTrigger value="monitoring" className="gap-2">
               <Activity size={16} />
@@ -98,14 +108,43 @@ function App() {
           </TabsList>
 
           <TabsContent value="dashboard" className="space-y-6">
-            <div>
-              <h2 className="text-2xl font-semibold mb-4">Infrastructure Risks</h2>
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                {risks.map((risk) => (
-                  <RiskCard key={risk.id} risk={risk} onClick={() => handleRiskClick(risk)} />
-                ))}
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="text-2xl font-semibold">Infrastructure Risks</h2>
+              <div className="flex items-center gap-2">
+                <Badge 
+                  variant={riskFilter === 'all' ? 'default' : 'outline'}
+                  className="cursor-pointer"
+                  onClick={() => setRiskFilter('all')}
+                >
+                  All ({risks.length})
+                </Badge>
+                <Badge 
+                  variant={riskFilter === 'technical' ? 'default' : 'outline'}
+                  className="cursor-pointer"
+                  onClick={() => setRiskFilter('technical')}
+                >
+                  <Cpu size={14} className="mr-1" />
+                  Technical ({technicalRisks.length})
+                </Badge>
+                <Badge 
+                  variant={riskFilter === 'business' ? 'default' : 'outline'}
+                  className="cursor-pointer"
+                  onClick={() => setRiskFilter('business')}
+                >
+                  <BriefcaseMetal size={14} className="mr-1" />
+                  Business ({businessRisks.length})
+                </Badge>
               </div>
             </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {filteredRisks.map((risk) => (
+                <RiskCard key={risk.id} risk={risk} onClick={() => handleRiskClick(risk)} />
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="interconnections" className="space-y-6">
+            <RiskInterconnections onRiskClick={handleRiskClick} />
           </TabsContent>
 
           <TabsContent value="monitoring" className="space-y-6">
