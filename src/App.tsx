@@ -11,12 +11,12 @@ import { BestPracticesPanel } from '@/components/BestPracticesPanel'
 import { RiskInterconnections } from '@/components/RiskInterconnections'
 import { risks, monitoringTools } from '@/lib/data'
 import { Risk } from '@/lib/types'
-import { Activity, ChartBar, BookOpen, ShieldCheck, CheckCircle, GitBranch, Cpu, BriefcaseMetal } from '@phosphor-icons/react'
+import { Activity, ChartBar, BookOpen, ShieldCheck, CheckCircle, GitBranch, Cpu, BriefcaseMetal, Brain } from '@phosphor-icons/react'
 
 function App() {
   const [selectedRisk, setSelectedRisk] = useState<Risk | null>(null)
   const [dialogOpen, setDialogOpen] = useState(false)
-  const [riskFilter, setRiskFilter] = useState<'all' | 'technical' | 'business'>('all')
+  const [riskFilter, setRiskFilter] = useState<'all' | 'technical' | 'business' | 'operational'>('all')
 
   const handleRiskClick = (risk: Risk) => {
     setSelectedRisk(risk)
@@ -28,6 +28,7 @@ function App() {
   const highRisks = risks.filter((r) => r.severity === 'high')
   const technicalRisks = risks.filter((r) => r.type === 'technical')
   const businessRisks = risks.filter((r) => r.type === 'business')
+  const operationalRisks = risks.filter((r) => r.type === 'operational')
   const totalAlerts = monitoringTools.reduce((sum, tool) => sum + tool.alertCount, 0)
 
   return (
@@ -133,6 +134,14 @@ function App() {
                 >
                   <BriefcaseMetal size={14} className="mr-1" />
                   Business ({businessRisks.length})
+                </Badge>
+                <Badge 
+                  variant={riskFilter === 'operational' ? 'default' : 'outline'}
+                  className="cursor-pointer"
+                  onClick={() => setRiskFilter('operational')}
+                >
+                  <Brain size={14} className="mr-1" />
+                  AI Operations ({operationalRisks.length})
                 </Badge>
               </div>
             </div>

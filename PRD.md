@@ -1,6 +1,6 @@
 # Planning Guide
 
-An enterprise-grade AI Data Center Infrastructure and Operations Risk Management Dashboard that visualizes interconnected technical and business risks across NVIDIA GPU-based infrastructure with real-time monitoring insights and cross-domain impact analysis.
+An enterprise-grade AI Data Center Infrastructure and Operations Risk Management Dashboard that visualizes interconnected technical, business, and AI operations risks across NVIDIA GPU-based infrastructure with real-time monitoring insights and cross-domain impact analysis.
 
 **Experience Qualities**:
 1. **Professional** - Enterprise-grade visual design that conveys authority and trustworthiness suitable for C-level presentations and data center operations teams
@@ -13,25 +13,25 @@ An enterprise-grade AI Data Center Infrastructure and Operations Risk Management
 ## Essential Features
 
 ### Risk Category Dashboard
-- **Functionality**: Display risk categories (GPU Hardware, Network/DPU, NVLink/NVSwitch, Software/Orchestration, Power/Cooling, Storage/IO, Security, Compliance) separated into Technical and Business sections with visual severity indicators and interconnections
-- **Purpose**: Provide operations and business teams immediate situational awareness of infrastructure health and business impact across all critical systems
-- **Trigger**: Application load, type filter selection (All/Technical/Business), or category filter
-- **Progression**: Landing view → Filtered risk cards with severity badges → Type badge shows technical/business → Hover reveals metrics → Click expands detailed view
-- **Success criteria**: All risk categories visible at glance with clear visual hierarchy, color-coded severity levels, technical vs business distinction, interconnection counts displayed
+- **Functionality**: Display risk categories (GPU Hardware, Network/DPU, NVLink/NVSwitch, Software/Orchestration, Power/Cooling, Storage/IO, Security, Compliance, AI Operations) separated into Technical, Business, and AI Operations sections with visual severity indicators and interconnections
+- **Purpose**: Provide operations, business, and AI/ML teams immediate situational awareness of infrastructure health, business impact, and AI workload risks across all critical systems
+- **Trigger**: Application load, type filter selection (All/Technical/Business/AI Operations), or category filter
+- **Progression**: Landing view → Filtered risk cards with severity badges → Type badge shows technical/business/operational → Hover reveals metrics → Click expands detailed view
+- **Success criteria**: All risk categories visible at glance with clear visual hierarchy, color-coded severity levels, technical/business/operational distinction, interconnection counts displayed
 
 ### Interactive Risk Interconnection Map
-- **Functionality**: Dedicated view showing technical risks and business risks side-by-side with their interconnection relationships, highlighting how technical failures impact business outcomes
-- **Purpose**: Reveal cross-domain dependencies between technical infrastructure and business metrics to inform holistic risk management strategies
+- **Functionality**: Dedicated view showing technical risks, business risks, and AI operations risks in three columns with their interconnection relationships, highlighting how technical failures impact business outcomes and AI workloads
+- **Purpose**: Reveal cross-domain dependencies between technical infrastructure, business metrics, and AI operations to inform holistic risk management strategies
 - **Trigger**: User selects "Interconnections" tab
-- **Progression**: Dashboard → Interconnections tab → Split view (Technical | Business) → Hover shows connections → Click risk to see detail → Key interconnections panel shows most connected risks
-- **Success criteria**: Clear separation of technical and business risks, visual indication of interconnection count, ability to click through to risk details, highlighting of most interconnected risks
+- **Progression**: Dashboard → Interconnections tab → Three-column view (Technical | Business | AI Operations) → Hover shows connections → Click risk to see detail → Key interconnections panel shows most connected risks
+- **Success criteria**: Clear separation of technical, business, and AI operations risks, visual indication of interconnection count, ability to click through to risk details, highlighting of most interconnected risks
 
 ### Risk Detail Modal
-- **Functionality**: Deep-dive panel for each risk showing type (technical/business), description, current severity, affected systems, interconnected risks, mitigation strategies, monitoring tools, and recent incidents
-- **Purpose**: Provide technical and business teams comprehensive information needed to understand and address specific risks including cross-domain impacts
+- **Functionality**: Deep-dive panel for each risk showing type (technical/business/operational), description, current severity, affected systems, interconnected risks, mitigation strategies, monitoring tools, and recent incidents
+- **Purpose**: Provide technical, business, and AI/ML teams comprehensive information needed to understand and address specific risks including cross-domain impacts
 - **Trigger**: Click on any risk card or interconnection node
 - **Progression**: Risk selection → Modal slides in → Risk type badge displayed → Tabs for Overview/Mitigation/Monitoring/Interconnections → Shows connected risks with their types → Action buttons → Close or navigate to related risks
-- **Success criteria**: Complete technical and business details accessible, interconnections clearly displayed with type indicators, smooth animations, clear CTAs for mitigation actions
+- **Success criteria**: Complete technical, business, and operational details accessible, interconnections clearly displayed with type indicators, smooth animations, clear CTAs for mitigation actions
 
 ### Monitoring Integration Dashboard
 - **Functionality**: Live status indicators for NVIDIA monitoring tools (DCGM, UFM, Base Command Manager, BlueField DPU) with health metrics and alert feeds
@@ -41,11 +41,11 @@ An enterprise-grade AI Data Center Infrastructure and Operations Risk Management
 - **Success criteria**: Real-time status updates, clear health indicators, integrated alert management, tool-specific metrics display
 
 ### Risk Severity Matrix
-- **Functionality**: Heat map showing all risks plotted by likelihood vs impact with risk type indicators (technical/business) and filterable views by category or affected infrastructure
-- **Purpose**: Enable risk prioritization and resource allocation decisions based on quantified risk assessment across both technical and business domains
+- **Functionality**: Heat map showing all risks plotted by likelihood vs impact with risk type indicators (technical/business/operational) and filterable views by category or affected infrastructure
+- **Purpose**: Enable risk prioritization and resource allocation decisions based on quantified risk assessment across technical, business, and AI operations domains
 - **Trigger**: Navigate to "Matrix" view or click analysis icon
 - **Progression**: Dashboard → Matrix toggle → Heat map renders with type badges → Hover shows risk details → Click filters → Adjust thresholds
-- **Success criteria**: Clear quadrant visualization, technical/business type indicators, interactive filtering, exportable for reporting, adjustable thresholds
+- **Success criteria**: Clear quadrant visualization, technical/business/operational type indicators, interactive filtering, exportable for reporting, adjustable thresholds
 
 ### Best Practices Library
 - **Functionality**: Searchable repository of mitigation strategies, preventive maintenance schedules, and configuration templates organized by risk category
@@ -149,6 +149,7 @@ Animations should reinforce the sense of a living, breathing infrastructure moni
   - ShieldCheck for security
   - ChartNetwork for dependencies
   - Activity for monitoring tools
+  - Brain for AI operations risks
   
 - **Spacing**: 
   - Container padding: 6 (24px) for main layout

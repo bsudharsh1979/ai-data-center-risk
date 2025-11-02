@@ -15,7 +15,8 @@ import {
   TrendUp,
   TrendDown,
   Minus,
-  Warning
+  Warning,
+  Brain
 } from '@phosphor-icons/react'
 import { cn } from '@/lib/utils'
 
@@ -33,6 +34,7 @@ const iconMap: Record<string, React.ElementType> = {
   Database,
   ShieldCheck,
   CheckCircle,
+  Brain,
   Cube
 }
 

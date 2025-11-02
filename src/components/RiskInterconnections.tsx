@@ -12,6 +12,7 @@ interface RiskInterconnectionsProps {
 export function RiskInterconnections({ onRiskClick }: RiskInterconnectionsProps) {
   const technicalRisks = risks.filter(r => r.type === 'technical')
   const businessRisks = risks.filter(r => r.type === 'business')
+  const operationalRisks = risks.filter(r => r.type === 'operational')
 
   const getConnectedRisks = (riskId: string) => {
     const risk = risks.find(r => r.id === riskId)
@@ -64,7 +65,7 @@ export function RiskInterconnections({ onRiskClick }: RiskInterconnectionsProps)
         </div>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         <Card className="p-6">
           <div className="flex items-center justify-between mb-4">
             <h3 className="text-lg font-semibold">Technical Risks</h3>
@@ -84,6 +85,18 @@ export function RiskInterconnections({ onRiskClick }: RiskInterconnectionsProps)
           </div>
           <div className="space-y-3">
             {businessRisks.map((risk) => (
+              <RiskNode key={risk.id} risk={risk} />
+            ))}
+          </div>
+        </Card>
+
+        <Card className="p-6">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-lg font-semibold">AI Operations</h3>
+            <Badge variant="secondary">{operationalRisks.length} risks</Badge>
+          </div>
+          <div className="space-y-3">
+            {operationalRisks.map((risk) => (
               <RiskNode key={risk.id} risk={risk} />
             ))}
           </div>

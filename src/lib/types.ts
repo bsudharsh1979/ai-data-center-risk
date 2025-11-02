@@ -1,5 +1,5 @@
 export type RiskSeverity = 'critical' | 'high' | 'medium' | 'low'
-export type RiskCategory = 'gpu-hardware' | 'network-dpu' | 'nvlink' | 'software' | 'power-cooling' | 'storage-io' | 'security' | 'compliance'
+export type RiskCategory = 'gpu-hardware' | 'network-dpu' | 'nvlink' | 'software' | 'power-cooling' | 'storage-io' | 'security' | 'compliance' | 'ai-operations'
 export type RiskType = 'technical' | 'business' | 'operational'
 
 export interface Risk {

@@ -312,6 +312,231 @@ export const risks: Risk[] = [
     monitoringTools: ['SIEM Integration', 'DLP Systems', 'Base Command Manager'],
     recentIncidents: 0,
     trend: 'stable'
+  },
+  {
+    id: 'ai-ops-1',
+    name: 'Model Training Instability',
+    category: 'ai-operations',
+    type: 'operational',
+    severity: 'high',
+    description: 'Training runs exhibit loss divergence, gradient explosions, or NaN values due to hyperparameter issues, data quality problems, or numerical precision errors.',
+    impact: 'Wasted GPU hours, delayed model deployment, increased training costs, failed convergence of critical models.',
+    likelihood: 7,
+    impactScore: 7,
+    affectedSystems: ['Training Pipeline', 'Model Development', 'GPU Resources', 'Data Processing'],
+    dependencies: ['gpu-1', 'storage-1', 'software-1'],
+    interconnections: ['business-3', 'business-2', 'gpu-1', 'ai-ops-2'],
+    mitigation: [
+      'Implement gradient norm monitoring and clipping',
+      'Use mixed-precision training with automatic loss scaling',
+      'Enable checkpointing for training state recovery',
+      'Validate data quality before training starts',
+      'Implement early stopping on anomalous metrics',
+      'Use TensorBoard for real-time training monitoring'
+    ],
+    monitoringTools: ['TensorBoard', 'MLflow', 'Base Command Manager'],
+    recentIncidents: 5,
+    trend: 'stable'
+  },
+  {
+    id: 'ai-ops-2',
+    name: 'Distributed Training Synchronization Failures',
+    category: 'ai-operations',
+    type: 'operational',
+    severity: 'critical',
+    description: 'Multi-node distributed training experiences gradient synchronization issues, stragglers, or collective communication failures across GPU clusters.',
+    impact: 'Complete training job failures, inconsistent model states, wasted compute on thousands of GPUs, extended time-to-market.',
+    likelihood: 6,
+    impactScore: 9,
+    affectedSystems: ['Distributed Training Framework', 'NCCL Communication', 'Multi-Node Clusters', 'InfiniBand Network'],
+    dependencies: ['network-1', 'nvlink-1', 'gpu-1'],
+    interconnections: ['network-1', 'ai-ops-1', 'business-1', 'business-3'],
+    mitigation: [
+      'Enable NCCL debug logging for communication issues',
+      'Implement timeout detection for straggler nodes',
+      'Use gradient checkpointing to reduce memory pressure',
+      'Configure optimal NCCL environment variables',
+      'Monitor all-reduce operation latencies',
+      'Implement node health checks before job start'
+    ],
+    monitoringTools: ['DCGM', 'NCCL Profiler', 'Base Command Manager'],
+    recentIncidents: 3,
+    trend: 'decreasing'
+  },
+  {
+    id: 'ai-ops-3',
+    name: 'Dataset Management and Data Pipeline Failures',
+    category: 'ai-operations',
+    type: 'operational',
+    severity: 'high',
+    description: 'Data loading bottlenecks, corrupted datasets, version mismatches, or preprocessing pipeline failures starve GPUs during training.',
+    impact: 'Low GPU utilization, training stalls, incorrect model behavior, data reproducibility issues.',
+    likelihood: 8,
+    impactScore: 6,
+    affectedSystems: ['Data Lake', 'Preprocessing Pipeline', 'Data Loaders', 'Feature Store'],
+    dependencies: ['storage-1', 'network-1'],
+    interconnections: ['storage-1', 'ai-ops-1', 'business-2', 'compliance-1'],
+    mitigation: [
+      'Implement NVIDIA DALI for GPU-accelerated data loading',
+      'Use data validation frameworks like TFX or Great Expectations',
+      'Version control datasets with DVC or MLflow',
+      'Enable data prefetching and caching strategies',
+      'Monitor data pipeline throughput continuously',
+      'Implement data quality checks at ingestion'
+    ],
+    monitoringTools: ['MLflow', 'Data Pipeline Monitor', 'Storage Analytics'],
+    recentIncidents: 6,
+    trend: 'increasing'
+  },
+  {
+    id: 'ai-ops-4',
+    name: 'Model Deployment and Serving Failures',
+    category: 'ai-operations',
+    type: 'operational',
+    severity: 'critical',
+    description: 'Production inference services experience latency spikes, memory leaks, version conflicts, or infrastructure scaling issues.',
+    impact: 'Customer-facing service degradation, SLA violations, revenue loss, poor user experience.',
+    likelihood: 5,
+    impactScore: 9,
+    affectedSystems: ['NVIDIA Triton Inference Server', 'Model Registry', 'Production API', 'Load Balancers'],
+    dependencies: ['gpu-1', 'network-1', 'software-1'],
+    interconnections: ['business-1', 'network-1', 'ai-ops-5', 'security-1'],
+    mitigation: [
+      'Deploy NVIDIA Triton with dynamic batching',
+      'Implement model version canary deployments',
+      'Enable GPU multi-instance GPU (MIG) for efficient serving',
+      'Configure autoscaling based on inference load',
+      'Monitor P95/P99 latency and throughput metrics',
+      'Implement circuit breakers and fallback models'
+    ],
+    monitoringTools: ['Triton Metrics', 'Prometheus', 'Base Command Manager'],
+    recentIncidents: 2,
+    trend: 'stable'
+  },
+  {
+    id: 'ai-ops-5',
+    name: 'Model Performance Degradation',
+    category: 'ai-operations',
+    type: 'operational',
+    severity: 'high',
+    description: 'Production models experience accuracy drift, data distribution shifts, or concept drift leading to degraded predictions over time.',
+    impact: 'Decreased model accuracy, poor business decisions, customer dissatisfaction, need for emergency retraining.',
+    likelihood: 7,
+    impactScore: 8,
+    affectedSystems: ['Production Models', 'Monitoring Systems', 'Feedback Loops', 'Data Collection'],
+    dependencies: ['ai-ops-4', 'ai-ops-3'],
+    interconnections: ['ai-ops-4', 'business-3', 'business-2', 'compliance-1'],
+    mitigation: [
+      'Implement continuous model monitoring for drift',
+      'Set up automated retraining pipelines',
+      'Deploy shadow models for A/B testing',
+      'Collect ground truth feedback continuously',
+      'Configure performance threshold alerts',
+      'Maintain model performance dashboards'
+    ],
+    monitoringTools: ['Model Monitor', 'MLflow', 'Custom Drift Detection'],
+    recentIncidents: 4,
+    trend: 'increasing'
+  },
+  {
+    id: 'ai-ops-6',
+    name: 'Experiment Tracking and Reproducibility Issues',
+    category: 'ai-operations',
+    type: 'operational',
+    severity: 'medium',
+    description: 'Lack of proper experiment tracking leads to inability to reproduce results, lost hyperparameters, or unclear model lineage.',
+    impact: 'Research velocity slowdown, difficulty debugging issues, compliance problems, wasted experimentation effort.',
+    likelihood: 8,
+    impactScore: 5,
+    affectedSystems: ['Experiment Tracking', 'Model Registry', 'Version Control', 'Documentation'],
+    dependencies: ['software-1'],
+    interconnections: ['ai-ops-1', 'compliance-1', 'business-3', 'business-2'],
+    mitigation: [
+      'Mandate MLflow or similar experiment tracking',
+      'Implement automated metric and artifact logging',
+      'Version control all code, data, and configs',
+      'Use containerization for environment reproducibility',
+      'Establish model card documentation standards',
+      'Regular audit of experiment metadata completeness'
+    ],
+    monitoringTools: ['MLflow', 'Git', 'Base Command Manager'],
+    recentIncidents: 7,
+    trend: 'stable'
+  },
+  {
+    id: 'ai-ops-7',
+    name: 'Resource Contention and Job Scheduling Conflicts',
+    category: 'ai-operations',
+    type: 'operational',
+    severity: 'high',
+    description: 'Multiple teams competing for GPU resources leads to priority conflicts, unfair allocation, and critical jobs being blocked.',
+    impact: 'Team friction, delayed critical projects, underutilized infrastructure, productivity loss.',
+    likelihood: 8,
+    impactScore: 7,
+    affectedSystems: ['Job Scheduler', 'Resource Manager', 'Multi-tenancy', 'Queue Management'],
+    dependencies: ['software-1', 'gpu-1'],
+    interconnections: ['business-2', 'business-3', 'software-1', 'ai-ops-1'],
+    mitigation: [
+      'Implement fair-share scheduling policies',
+      'Establish priority tiers for different job types',
+      'Deploy resource quotas per team/project',
+      'Enable GPU time-slicing for smaller workloads',
+      'Provide visibility into queue status and ETA',
+      'Create escalation process for urgent jobs'
+    ],
+    monitoringTools: ['Base Command Manager', 'Slurm/K8s Metrics'],
+    recentIncidents: 9,
+    trend: 'increasing'
+  },
+  {
+    id: 'ai-ops-8',
+    name: 'Model Bias and Fairness Issues',
+    category: 'ai-operations',
+    type: 'operational',
+    severity: 'critical',
+    description: 'AI models exhibit biased behavior across demographics, leading to unfair outcomes and potential discrimination.',
+    impact: 'Regulatory violations, lawsuits, reputational damage, product recalls, loss of user trust.',
+    likelihood: 5,
+    impactScore: 10,
+    affectedSystems: ['Training Data', 'Model Validation', 'Production Models', 'Compliance Systems'],
+    dependencies: ['ai-ops-3', 'compliance-1'],
+    interconnections: ['compliance-1', 'business-5', 'ai-ops-5', 'security-1'],
+    mitigation: [
+      'Implement bias detection in training pipelines',
+      'Use fairness metrics (demographic parity, equalized odds)',
+      'Conduct adversarial testing for protected attributes',
+      'Establish diverse testing datasets',
+      'Regular fairness audits by independent teams',
+      'Implement bias mitigation techniques in training'
+    ],
+    monitoringTools: ['Fairness Toolkit', 'Model Validation Suite', 'Compliance Dashboard'],
+    recentIncidents: 1,
+    trend: 'stable'
+  },
+  {
+    id: 'ai-ops-9',
+    name: 'Checkpoint and Model Artifact Management',
+    category: 'ai-operations',
+    type: 'operational',
+    severity: 'medium',
+    description: 'Poor management of training checkpoints and model artifacts leads to storage bloat, lost models, or inability to recover from failures.',
+    impact: 'Storage cost overruns, inability to resume training, lost experimental results, slow model deployment.',
+    likelihood: 7,
+    impactScore: 6,
+    affectedSystems: ['Model Storage', 'Checkpoint Storage', 'Artifact Registry', 'Backup Systems'],
+    dependencies: ['storage-1', 'software-1'],
+    interconnections: ['storage-1', 'business-2', 'ai-ops-1', 'ai-ops-6'],
+    mitigation: [
+      'Implement automated checkpoint cleanup policies',
+      'Use efficient checkpoint formats (sharded, compressed)',
+      'Deploy hierarchical storage for old checkpoints',
+      'Enable incremental checkpointing to reduce writes',
+      'Implement checkpoint versioning and metadata',
+      'Regular audits of storage usage and cleanup'
+    ],
+    monitoringTools: ['Storage Analytics', 'MLflow', 'Base Command Manager'],
+    recentIncidents: 3,
+    trend: 'stable'
   }
 ]
 
@@ -453,6 +678,86 @@ export const bestPractices: BestPractice[] = [
     ],
     relatedRisks: ['software-1', 'compliance-1'],
     implemented: true
+  },
+  {
+    id: 'bp-6',
+    title: 'Distributed Training Best Practices',
+    category: 'ai-operations',
+    description: 'Optimize multi-node training with proper NCCL configuration, gradient synchronization, and fault tolerance.',
+    steps: [
+      'Configure optimal NCCL environment variables for your topology',
+      'Enable gradient checkpointing to reduce memory usage',
+      'Implement timeout detection for straggler nodes',
+      'Use NCCL profiling to identify communication bottlenecks',
+      'Deploy health checks before starting distributed jobs',
+      'Enable automatic checkpoint recovery on node failures'
+    ],
+    relatedRisks: ['ai-ops-2', 'network-1', 'gpu-1'],
+    implemented: false
+  },
+  {
+    id: 'bp-7',
+    title: 'MLOps Pipeline Automation',
+    category: 'ai-operations',
+    description: 'Establish end-to-end MLOps pipelines for experiment tracking, model versioning, and deployment automation.',
+    steps: [
+      'Deploy MLflow for centralized experiment tracking',
+      'Implement automated model versioning and registry',
+      'Create CI/CD pipelines for model deployment',
+      'Enable automated model validation before production',
+      'Configure rollback procedures for failed deployments',
+      'Maintain comprehensive model documentation'
+    ],
+    relatedRisks: ['ai-ops-6', 'ai-ops-4', 'ai-ops-1'],
+    implemented: true
+  },
+  {
+    id: 'bp-8',
+    title: 'Production Model Monitoring',
+    category: 'ai-operations',
+    description: 'Implement comprehensive monitoring for production models including drift detection and performance tracking.',
+    steps: [
+      'Deploy continuous monitoring for model accuracy',
+      'Configure data drift detection thresholds',
+      'Implement automated alerts for performance degradation',
+      'Collect ground truth feedback for validation',
+      'Set up A/B testing infrastructure',
+      'Create dashboards for model health metrics'
+    ],
+    relatedRisks: ['ai-ops-5', 'ai-ops-4', 'business-1'],
+    implemented: false
+  },
+  {
+    id: 'bp-9',
+    title: 'Efficient Data Pipeline Design',
+    category: 'ai-operations',
+    description: 'Optimize data loading and preprocessing to eliminate GPU starvation and maximize training efficiency.',
+    steps: [
+      'Implement NVIDIA DALI for GPU-accelerated preprocessing',
+      'Enable data prefetching with multiple worker threads',
+      'Use efficient data formats (TFRecord, Parquet, Arrow)',
+      'Deploy data validation at ingestion points',
+      'Implement caching strategies for frequently used datasets',
+      'Monitor data pipeline throughput continuously'
+    ],
+    relatedRisks: ['ai-ops-3', 'storage-1', 'business-2'],
+    implemented: false
+  },
+  {
+    id: 'bp-10',
+    title: 'AI Fairness and Bias Testing',
+    category: 'ai-operations',
+    description: 'Establish rigorous testing and monitoring processes to detect and mitigate model bias.',
+    steps: [
+      'Implement fairness metrics in model evaluation',
+      'Create diverse testing datasets covering edge cases',
+      'Conduct regular bias audits by independent teams',
+      'Deploy adversaial testing for protected attributes',
+      'Establish model card documentation standards',
+      'Integrate fairness checks into CI/CD pipelines'
+    ],
+    relatedRisks: ['ai-ops-8', 'compliance-1', 'business-5'],
+    implemented: false
   }
 ]
 
@@ -465,7 +770,8 @@ export const getCategoryInfo = (category: string) => {
     'power-cooling': { icon: 'Lightning', label: 'Power & Cooling', color: 'text-destructive' },
     'storage-io': { icon: 'Database', label: 'Storage & I/O', color: 'text-primary' },
     'security': { icon: 'ShieldCheck', label: 'Security', color: 'text-warning' },
-    'compliance': { icon: 'CheckCircle', label: 'Compliance', color: 'text-muted-foreground' }
+    'compliance': { icon: 'CheckCircle', label: 'Compliance', color: 'text-muted-foreground' },
+    'ai-operations': { icon: 'Brain', label: 'AI Operations', color: 'text-primary' }
   }
   return categoryMap[category] || { icon: 'Cube', label: category, color: 'text-foreground' }
 }
